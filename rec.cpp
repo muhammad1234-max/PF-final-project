@@ -2,6 +2,7 @@
 #include <string.h>
 #include <conio.h>
 #include <stdlib.h>
+//stucutre for the date
 struct date{
 	int d;
 	int m;
@@ -10,12 +11,15 @@ struct date{
 
 int abc;
 
+//structure for flight info
 struct flight{
 	int flightnum;
 	char country[30];
 	int timing;
 	struct date flightdate;
 }flightinfo;
+
+//designed message to be displayed on start of the program
 headMessage(const char* title){
     system("cls");
       printf("\t\t\t###########################################################################");
@@ -27,6 +31,8 @@ headMessage(const char* title){
     printf("\t\t\t\t\t\t\t%s",title);
     printf("\n\t\t\t----------------------------------------------------------------------------");
 }
+
+//another designed message to be displayed on the start of the program
 start(){
     headMessage("PF PROJECT");
     printf("\n\n\n\n\n");
@@ -40,13 +46,15 @@ start(){
     printf("\n\t\t\t        =============================================");
     printf("\n\n\t\t\t  ********************************************************\n");
     printf("\n\n\n\t\t\t Press Enter to continue.....");
-    getch();//this will pause the program until the user has pressed some key on the keyboard
+    getch(); //this will pause the program until the user has pressed some key on the keyboard
 }
 
+//adds a new flight record  to the database
 add()
 {
     FILE *fp;
-	fp = fopen("lms.bin","ab+");
+	fp = fopen("lms.bin","ab+"); //opens a binary file
+	//error handling
 	if(fp == NULL){
         printf("\n\t\t\tFile is not opened\n");
         exit(1);
@@ -54,16 +62,18 @@ add()
 	headMessage("ADD flightS");
 	printf("\n\n\t\t\tENTER flight DETAILS BELOW:");
     printf("\n\t\t\t---------------------------------------------------------------------------\n");
-    
+
+
+    //entering data about the flight
     printf("\n\t\t\tflight number: ");
     scanf("%d",&flightinfo.flightnum);
-    fflush(stdin);   
+    fflush(stdin); //clearing the buffer   
 	    
     printf("\n\t\t\tflight country: ");
     gets(flightinfo.country);
-	fflush(stdin);    	
+    fflush(stdin);    	
 	    
-	printf("\n\t\t\tTiming: ");
+    	printf("\n\t\t\tTiming: ");
 	scanf("%d",&flightinfo.timing);
 	fflush(stdin);       
 	
@@ -78,7 +88,8 @@ add()
 	printf("\n\t\t\tEnter year(yyyy): ");
 	scanf("%d",&flightinfo.flightdate.y);
 	fflush(stdin);
-    
+
+	//writes the whole flight structure to the file
 	fwrite(&flightinfo, sizeof(flightinfo), 1, fp);	     
     fclose(fp); 	
 }
@@ -88,8 +99,10 @@ search() //function to search for data of specific flights by typing in the coun
     int found=1;
     char searchflight[30];
     FILE *fp;
-	fp = fopen("lms.bin","rb");
-    if(fp == NULL){
+	fp = fopen("lms.bin","rb"); //opening the binary file
+    
+	//error handling
+	if(fp == NULL){
         printf("\n\t\t\tFile is not opened\n");
         exit(1);
     }
@@ -101,8 +114,9 @@ search() //function to search for data of specific flights by typing in the coun
     rewind(fp);
     while(fread(&flightinfo, sizeof(flightinfo), 1, fp)==1)
     {
-		if(strcmp(flightinfo.country,searchflight)==0)
+		if(strcmp(flightinfo.country,searchflight)==0) //compares user input to the data stored
         {
+		//if its a match then all the relevant data is printed
             printf("\n\t\t\tflight ID = %d\n",flightinfo.flightnum);
         	printf("\t\t\tflight country = %s\n",flightinfo.country);
         	printf("\t\t\t Timings = %d\n",flightinfo.timing);
@@ -130,8 +144,8 @@ view() //will display all the flghts available and their data
      	printf("\n\t\t\tFile is not opened\n");
         exit(1);
     }
-	rewind(fp);
-    while(fread(&flightinfo, sizeof(flightinfo), 1, fp)==1) //condition that will keep executing till their is data
+	rewind(fp); //takes the prompt back to the start of the file
+    while(fread(&flightinfo, sizeof(flightinfo), 1, fp)==1) //condition that will keep executing till their is data avalable in the fil or till EOF
     {
         printf("\n\t\t\tflight %d\n\n",count);
         printf("\t\t\tflight number = %d\n",flightinfo.flightnum);
@@ -152,10 +166,10 @@ view() //will display all the flghts available and their data
     getchar();	
 }
 
-removeflight()
+removeflight() //function to remove a flight record
 {
     int found = 0;
-    int deleteid = 0;
+    int deleteid = 0; //id of the flight record we want to delete
     char country[30] = {0};
     FILE *fp = NULL;
     FILE *fp1 = NULL;
@@ -167,7 +181,7 @@ removeflight()
         printf("File is not opened\n");
         exit(1);
     }
-    fp1 = fopen("recycle.bin","wb");
+    fp1 = fopen("recycle.bin","wb"); //opening another file to store the deleted records in case of need again
     if(fp1 == NULL)
     {
         fclose(fp);
@@ -204,9 +218,10 @@ removeflight()
     getchar();
 }
 
-edit(){
+edit() //to edit a flight record
+{ 
     int found=1;
-    char editflight[30];
+    char editflight[30]; // id number of the file you want to edit
     FILE *fp;
 	fp = fopen("lms.bin","rb+");
     if(fp == NULL){
@@ -222,7 +237,8 @@ edit(){
     while(fread(&flightinfo, sizeof(flightinfo), 1, fp)==1)
     {
 		if(strcmp(flightinfo.country, editflight)==0)
-        {
+        {           
+		//asking for the input of the record again
         	printf("\t\t\tPrevious flight number = %d\n",flightinfo.flightnum);
         	printf("\t\t\tPrevious flight country = %s\n",flightinfo.country);
         	printf("\t\t\tPrevious flight timings = %d\n",flightinfo.timing);
@@ -276,7 +292,7 @@ menu(){ //admin panel menu
         printf("\n\t\t\t0.Exit");
         printf("\n\n\n\t\t\tEnter choice => ");
         scanf("%d",&choice);
-        switch(choice)
+        switch(choice) //based on user option choice calling the relevant function
         {
         case 1:
             add();
@@ -306,7 +322,7 @@ int main()
 {    
  int j,k,fln,select,tn,b;
  	int com, i, count=1, choice, select2,a[256],z;
-	char ch,psn[8], menreturn, rpass[11]="project123",id[30], pass[30],c;
+	char ch,psn[8], menreturn, rpass[11]="project123"/*the password to login in the admin panel*/,id[30], pass[30],c;
 
     printf("Welcome to Heathrow airports flight management system\n\n\n\n\nEnter 1 for Admin pannel and 2 for User terminal ");
 	scanf("%d",&z);
@@ -317,7 +333,7 @@ int main()
 	printf("Enter Password:\n");
 	fflush(stdin);
 	gets(pass);                    //password is project123
-    com= strcmp(pass, rpass);
+    com= strcmp(pass, rpass); //comparing the user entered password to the actual password
 	if(com !=0)
 	{
 		printf("\n\n\nIncorrect password!\n\n");
@@ -344,7 +360,7 @@ int main()
 	scanf("%d", &choice);
 	system("cls");
 
-switch(choice)
+switch(choice) //informing the user about their cabin class based on ticket number and the amenities provided for all the differennt classes
 	{
 		default:
 			printf("\nOption currently unavailable!");
@@ -435,7 +451,7 @@ switch(choice)
 					}
 		break;
 	}
-			
+		//hardcoding all the data different cities	
 		case 1:
 		printf("Enter number to search for Flight(1-10)=\n");
 		printf("\n1-Belfast");
