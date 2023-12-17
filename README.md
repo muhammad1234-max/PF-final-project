@@ -2,12 +2,13 @@
 ## This project is a airport flight management terminal. 
 
 ## project proposal:
-<p>the idea was to create a program that can cater to the needs of both management staff and the<br>
-   people coming to the airport. A layer of security is to be added to ensure a normal user cant access<br>
-   the admin panel and the data in the file cant be manually changed. In addition to that data recycling functionality<br>
-   was to be added so that any and all flight records deleted are stored in another recycled file and that data could be<br>
-   deleted later on. Attractive prompt messages to be displayed to make the interface more user friendly and should have<br>
-   enough data manipulation options for the management.
+<p>the idea was to create a program that can cater to the needs of both management staff and the people coming to the<br>
+   airport. A layer of security is to be added to ensure a normal user cant access the admin panel and the data in the<br>
+   file cant be manually changed. In addition to that data recycling functionality was to be added so that any and all<br>
+   flight records deleted are stored in another recycled file and that data could be deleted later on. Attractive prompt<br>
+   messages to be displayed to make the interface more user friendly and should have enough data manipulation options for<br>
+   the management. The user panel should have all the data about flight layovers and flight timings to various destinations<br>
+   which the user can access through the user panel and also should have the functionality to book flight tickets.
 </p>
 
 ## It has 2 main sections:
